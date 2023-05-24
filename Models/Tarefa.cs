@@ -22,4 +22,6 @@ public class Tarefa
     {
         get { return Concluido ? "Concluído" : "Não concluído"; }
     }
+
+    public short NívelUrgencia {get; set;}
 }
