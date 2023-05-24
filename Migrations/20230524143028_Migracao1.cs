@@ -24,7 +24,7 @@ namespace ApiToDo.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     ConteudoTarefa = table.Column<string>(type: "varchar(200)", maxLength: 200, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Conluido = table.Column<bool>(type: "tinyint(1)", nullable: false)
+                    Concluido = table.Column<bool>(type: "tinyint(1)", nullable: false)
                 },
                 constraints: table =>
                 {

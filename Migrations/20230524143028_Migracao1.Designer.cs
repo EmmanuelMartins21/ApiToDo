@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiToDo.Migrations
 {
     [DbContext(typeof(ApiToDoContext))]
-    [Migration("20230524141031_Migracao1")]
+    [Migration("20230524143028_Migracao1")]
     partial class Migracao1
     {
         /// <inheritdoc />
@@ -27,7 +27,7 @@ namespace ApiToDo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Conluido")
+                    b.Property<bool>("Concluido")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ConteudoTarefa")

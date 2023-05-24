@@ -24,7 +24,7 @@ namespace ApiToDo.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<bool>("Conluido")
+                    b.Property<bool>("Concluido")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("ConteudoTarefa")

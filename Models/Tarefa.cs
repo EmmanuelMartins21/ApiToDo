@@ -16,5 +16,10 @@ public class Tarefa
     [StringLength(200)]
     public string? ConteudoTarefa { get; set;}
 
-    public bool Conluido { get; set; } = false;
+    public bool Concluido { get; set; } = false;
+
+    public string Status 
+    {
+        get { return Concluido ? "Concluído" : "Não concluído"; }
+    }
 }
