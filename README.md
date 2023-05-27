@@ -4,10 +4,12 @@ API REST em desenvolvimento utilizando .NET que gerencia uma lista de tarefas. A
 possui persistência em um banco de dados MySQL.
 
 ## A CONSTRUÇÃO
-- A API e possui 3 operações:
+- A API e possui 5 operações:
   1) Registrar tarefa: Recebe os dados da tarefa e registra com status "Não concluida";
   2) Buscar todas as tarefas;
   3) Buscar tarefa: Busca pelo Id da tarefa;
+  4) Atualizar a tarefa pelo Id;
+  5) Atualizar todas as tarefas;
   
 ## ENDPOINTS 
 - [HttpPost] </br>

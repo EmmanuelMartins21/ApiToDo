@@ -20,7 +20,7 @@ namespace ApiToDo.Migrations
 
             modelBuilder.Entity("ApiToDo.Models.Tarefa", b =>
                 {
-                    b.Property<int>("IdTarefa")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -35,7 +35,7 @@ namespace ApiToDo.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.HasKey("IdTarefa");
+                    b.HasKey("Id");
 
                     b.ToTable("Tarefas");
                 });

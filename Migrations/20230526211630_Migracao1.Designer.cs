@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiToDo.Migrations
 {
     [DbContext(typeof(ApiToDoContext))]
-    [Migration("20230524143028_Migracao1")]
+    [Migration("20230526211630_Migracao1")]
     partial class Migracao1
     {
         /// <inheritdoc />
@@ -23,7 +23,7 @@ namespace ApiToDo.Migrations
 
             modelBuilder.Entity("ApiToDo.Models.Tarefa", b =>
                 {
-                    b.Property<int>("IdTarefa")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
@@ -38,7 +38,7 @@ namespace ApiToDo.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("varchar(50)");
 
-                    b.HasKey("IdTarefa");
+                    b.HasKey("Id");
 
                     b.ToTable("Tarefas");
                 });

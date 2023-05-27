@@ -1,14 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ApiToDo.Models;
 
-[Table("Tarefas")]
 public class Tarefa
 {
     [Key]
-    public int IdTarefa { get; set;}
+    public int Id { get; set; }
 
     [StringLength(50)]
     public string? TituloTarefa { get; set;}

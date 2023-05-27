@@ -18,7 +18,7 @@ namespace ApiToDo.Migrations
                 name: "Tarefas",
                 columns: table => new
                 {
-                    IdTarefa = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     TituloTarefa = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
@@ -28,7 +28,7 @@ namespace ApiToDo.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Tarefas", x => x.IdTarefa);
+                    table.PrimaryKey("PK_Tarefas", x => x.Id);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
         }
