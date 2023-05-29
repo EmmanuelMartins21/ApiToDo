@@ -13,21 +13,23 @@ possui persistência em um banco de dados MySQL.
   
 ## ENDPOINTS 
 - [HttpPost] </br>
-     Request URL = `https://localhost:7205/Tarefa`
+     Request URL = `https://localhost:7205/controller/task`
 Grava um JSON da venda no formato: </br>
     ```
     {
-      "idTarefa": 0,
+      "id": 0,
       "tituloTarefa": "string",
       "conteudoTarefa": "string",
-      "concluido": true
+      "dataCriacao": "2023-05-29T23:32:42.220Z",
+      "concluido": true,
+      "nivelUrgencia": "string"
     }
     ```
 - [HttpGet] </br>
-   Retorna todas as tarefas registradas. Request URL = `https://localhost:7205/Tarefa` </br>
+   Retorna todas as tarefas registradas. Request URL = `https://localhost:7205/controller/task` </br>
 
 - [HttpGet("{id}")] </br>
-   Necessita apenas do ID da venda que deseja consultar. Request URL = `'https://localhost:7205/Tarefa/idTarefa` </br>
+   Necessita apenas do ID da venda que deseja consultar. Request URL = `https://localhost:7205/controller/task/idTarefa` </br>
  
 
 ## TECNOLOGIAS ENVOLVIDAS
