@@ -4,73 +4,144 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ApiToDo.Controllers;
 [ApiController]
-[Route("[controller]")]
+[Route("controller/task")]
 public class TarefaController : ControllerBase
 {
     private readonly ApiToDoContext _context;
+    private readonly ILogger<TarefaController> _logger;
 
-    public TarefaController(ApiToDoContext context)
+    public TarefaController(ApiToDoContext context, ILogger<TarefaController> logger)
     {
         _context = context;
+        _logger = logger;
     }
     [HttpGet]
-    public ActionResult <IEnumerable<Tarefa>> GetTarefas()
+    public ActionResult<IEnumerable<Tarefa>> GetTarefas()
     {
-        var tarefas = _context.Tarefas.ToList();
-        
-        return tarefas is null ? NotFound(): tarefas;
+        _logger.LogInformation("GET /Tarefa - Iniciando busca de todas as tarefas " + DateTime.Now);
+        try
+        {
+            var tarefas = _context.Tarefas.ToList();
+
+            if (tarefas is null || tarefas.Count == 0)
+            {
+                _logger.LogInformation("GET /Tarefa - Nenhuma tarefa encontrada " + DateTime.Now);
+                return NotFound();
+            }
+            _logger.LogInformation("GET /Tarefa - Tarefas encontradas com sucesso " + DateTime.Now);
+            return tarefas;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "GET /Tarefa - Ocorreu um erro ao buscar as tarefas");
+            return StatusCode(500);
+        }
     }
 
     [HttpGet("{id}")]
     public ActionResult GetTarefaPorId(int id)
     {
-        var tarefa = _context.Tarefas.Find(id);
-        
-        return tarefa is null ? BadRequest(new 
-                                {Erro = $"Não foi possivel encontar a tarefa: {id}"}) : 
-                                Ok(tarefa);
+        _logger.LogInformation($"GET /Tarefa/{id} - Iniciando busca da tarefa com ID: {id}");
+
+        try
+        {
+            var tarefa = _context.Tarefas.Find(id);
+
+            if (tarefa is null)
+            {
+                _logger.LogInformation($"GET /Tarefa/{id} - Tarefa não encontrada: {id}");
+                return BadRequest(new { Erro = $"Não foi possível encontrar a tarefa: {id}" });
+            }
+
+            _logger.LogInformation($"GET /Tarefa/{id} - Tarefa encontrada com sucesso: {id}");
+            return Ok(tarefa);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"GET /Tarefa/{id} - Ocorreu um erro ao buscar a tarefa: {id}");
+            return StatusCode(500);
+        }
     }
 
     [HttpPost]
     public ActionResult PostTarefa(Tarefa tarefa)
     {
-        _context.Tarefas.Add(tarefa);
-        _context.SaveChanges();
-        return CreatedAtAction(nameof(GetTarefas), new { Id = tarefa.Id }, tarefa);
+        _logger.LogInformation("POST /Tarefa - Iniciando criação de nova tarefa");
+
+        try
+        {
+            _context.Tarefas.Add(tarefa);
+            _context.SaveChanges();
+
+            _logger.LogInformation("POST /Tarefa - Tarefa criada com sucesso");
+            return CreatedAtAction(nameof(GetTarefas), new { Id = tarefa.Id }, tarefa);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "POST /Tarefa - Ocorreu um erro ao criar a tarefa");
+            return StatusCode(500);
+        }
     }
 
+
     [HttpPut("{id}")]
-    public ActionResult PutTarefaPorId(int tarefaId)
+    public ActionResult PutTarefaPorId(int id)
     {
-        var tarefa = _context.Tarefas.Find(tarefaId);
+        _logger.LogInformation($"PUT /Tarefa/{id} - Iniciando atualização da tarefa com ID: {id}");
 
-        if (tarefa != null)
+        try
         {
-            tarefa.Concluido = true;
-        }
-        _context.Tarefas.Update(tarefa);
-        _context.SaveChanges();
+            var tarefa = _context.Tarefas.Find(id);
 
-        return Ok(tarefa);
+            if (tarefa is null)
+            {
+                _logger.LogInformation($"PUT /Tarefa/{id} - Tarefa não encontrada: {id}");
+                return BadRequest(new { Erro = $"Não foi possível encontrar a tarefa: {id}" });
+            }
+
+            tarefa.Concluido = true;
+            _context.Tarefas.Update(tarefa);
+            _context.SaveChanges();
+
+            _logger.LogInformation($"PUT /Tarefa/{id} - Tarefa atualizada com sucesso: {id}");
+            return Ok(tarefa);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"PUT /Tarefa/{id} - Ocorreu um erro ao atualizar a tarefa: {id}");
+            return StatusCode(500);
+        }
     }
 
     [HttpPut]
     public ActionResult PutTarefas()
     {
-        var tarefas = _context.Tarefas.ToList();
+        _logger.LogInformation("PUT /Tarefa - Iniciando atualização de todas as tarefas");
 
-        if (tarefas != null)
+        try
         {
-            foreach(var t in tarefas)
-            {
-                if(t.Concluido == false) t.Concluido = true;
+            var tarefas = _context.Tarefas.ToList();
 
-                _context.Tarefas.Update(t);
-                _context.SaveChanges(); 
+            if (tarefas is null || tarefas.Count == 0)
+            {
+                _logger.LogInformation("PUT /Tarefa - Nenhuma tarefa encontrada");
+                return BadRequest(new { Erro = "Não foi possível atualizar todas as tarefas" });
             }
+
+            foreach (var t in tarefas)
+            {
+                t.Concluido = true;
+                _context.Tarefas.Update(t);
+                _context.SaveChanges();
+            }
+
+            _logger.LogInformation("PUT /Tarefa - Todas as tarefas atualizadas com sucesso");
             return Ok(tarefas);
-        }       
-        
-        return BadRequest(new { Erro = "Não foi possivel atualizar todas as tarefas" });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "PUT /Tarefa - Ocorreu um erro ao atualizar as tarefas");
+            return StatusCode(500);
+        }
     }
 }

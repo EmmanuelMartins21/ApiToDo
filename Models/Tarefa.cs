@@ -13,6 +13,7 @@ public class Tarefa
 
     [StringLength(200)]
     public string? ConteudoTarefa { get; set;}
+    public DateTime? DataCriacao { get; set;} = DateTime.Now;
 
     public bool Concluido { get; set; } = false;
 
@@ -21,5 +22,6 @@ public class Tarefa
         get { return Concluido ? "Concluído" : "Não concluído"; }
     }
 
-    public short NívelUrgencia {get; set;}
+    public string NivelUrgencia { get; set; }
+    
 }

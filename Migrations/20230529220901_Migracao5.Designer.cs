@@ -3,6 +3,7 @@ using System;
 using ApiToDo.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ApiToDo.Migrations
 {
     [DbContext(typeof(ApiToDoContext))]
-    partial class ApiToDoContextModelSnapshot : ModelSnapshot
+    [Migration("20230529220901_Migracao5")]
+    partial class Migracao5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
