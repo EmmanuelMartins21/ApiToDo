@@ -9,12 +9,16 @@ public class Tarefa
     public int Id { get; set; }
 
     [StringLength(50)]
-    public string? TituloTarefa { get; set;}
+    public string TituloTarefa { get; set;}
 
     [StringLength(200)]
-    public string? ConteudoTarefa { get; set;}
-    public DateTime? DataCriacao { get; set;} = DateTime.Now;
+    public string ConteudoTarefa { get; set;}
+    public DateTime DataCriacao { get; set;} = DateTime.Now;
 
+    public DateTime? DataConclusao
+    {
+        get { return Concluido ? DateTime.Now : null; }
+    }
     public bool Concluido { get; set; } = false;
 
     public string Status 
@@ -22,6 +26,6 @@ public class Tarefa
         get { return Concluido ? "Concluído" : "Não concluído"; }
     }
 
-    public string NivelUrgencia { get; set; }
+    public string? NivelUrgencia { get; set; }
     
 }

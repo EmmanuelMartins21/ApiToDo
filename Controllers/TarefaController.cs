@@ -1,6 +1,7 @@
 ﻿using ApiToDo.Context;
 using ApiToDo.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace ApiToDo.Controllers;
 [ApiController]
@@ -69,11 +70,16 @@ public class TarefaController : ControllerBase
         _logger.LogInformation("POST /Tarefa - Iniciando criação de nova tarefa");
 
         try
-        {
-            _context.Tarefas.Add(tarefa);
-            _context.SaveChanges();
+        {         
+            if(!(string.IsNullOrEmpty(tarefa.TituloTarefa) &&
+                 string.IsNullOrEmpty(tarefa.ConteudoTarefa)))
+            {
+                _context.Tarefas.Add(tarefa);
+                _context.SaveChanges();
 
-            _logger.LogInformation("POST /Tarefa - Tarefa criada com sucesso");
+                _logger.LogInformation($"POST /Tarefa - Tarefa{tarefa.Id} criada com sucesso");
+            }
+            
             return CreatedAtAction(nameof(GetTarefas), new { Id = tarefa.Id }, tarefa);
         }
         catch (Exception ex)
@@ -141,6 +147,65 @@ public class TarefaController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, "PUT /Tarefa - Ocorreu um erro ao atualizar as tarefas");
+            return StatusCode(500);
+        }
+    }
+
+    [HttpDelete]
+    public ActionResult DeleteTarefa(int id)
+    {
+        _logger.LogInformation($"Excluindo a tarefa ID: {id}");
+
+        try
+        {
+            var tarefa = _context.Tarefas.Find(id);
+
+            if (tarefa is null)
+            {
+                _logger.LogInformation($"Tarefa não encontrada: {id}");
+                return BadRequest(new { Erro = $"Não foi possível encontrar a tarefa: {id}" });
+            }
+
+            _context.Tarefas.Remove(tarefa);
+
+            _logger.LogInformation($"Tarefa {id} removida com sucesso: ");
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Ocorreu um erro ao excluir a tarefa: {id}");
+            return StatusCode(500);
+        }        
+    }
+
+    [HttpDelete]
+    public async Task<ActionResult<IEnumerable<Tarefa>>> DeleteTarefaPorData()
+    {
+        _logger.LogInformation($"Excluindo as tarefas antigas");
+        try
+        {
+            var tarefas = _context.Tarefas.Where(t => (DateTime.Now - t.DataCriacao).TotalDays > 60).ToList();
+
+            if (tarefas is null)
+            {
+                _logger.LogInformation($"Tarefas não encontradas");
+                return BadRequest(new { Erro = $"Não foi possível encontrar as tarefas" });
+            }
+
+            foreach(var t in tarefas)
+            {
+                _logger.LogInformation($"Excluindo a tarefa: {t}");
+                _context.Tarefas.Remove(t);
+                _logger.LogInformation($"Tarefa {t} excluida com sucesso");
+            }
+
+            await _context.SaveChangesAsync();
+            _logger.LogInformation($"Tarefas removidas com sucesso: ");
+            return Ok();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, $"Ocorreu um erro ao excluir a tarefa:");
             return StatusCode(500);
         }
     }
