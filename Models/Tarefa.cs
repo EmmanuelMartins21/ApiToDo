@@ -19,7 +19,7 @@ public class Tarefa
     {
         get { return Concluido ? DateTime.Now : null; }
     }
-    public bool Concluido { get; set; } = false;
+    public bool Concluido { get { return false; } set { } }
 
     public string Status 
     {
